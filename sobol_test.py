@@ -6,6 +6,8 @@
   Author:
     Original MATLAB version by John Burkardt.
     PYTHON version by Corrado Chisari
+
+    Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 
 from numpy import bitwise_xor

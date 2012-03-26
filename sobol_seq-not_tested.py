@@ -6,8 +6,11 @@
     Original FORTRAN77 version of tau_sobol by Bennett Fox.
     MATLAB version by John Burkardt.
     PYTHON version by Corrado Chisari
+
     Original MATLAB versions of other functions by John Burkardt.
     PYTHON versions by Corrado Chisari
+
+    Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 def r4_uniform_01 ( seed ):
   """

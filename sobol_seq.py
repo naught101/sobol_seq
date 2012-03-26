@@ -11,6 +11,8 @@
 
     Original MATLAB versions of other functions by John Burkardt.
     PYTHON versions by Corrado Chisari
+
+    Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 
 import math
