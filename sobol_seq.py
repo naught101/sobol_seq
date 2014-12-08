@@ -112,21 +112,24 @@ def i4_bit_lo0 ( n ):
     i = i2
   return bit
 
-def i4_sobol_generate ( m, n, skip ):
+def i4_sobol_generate(dim_num, n, skip = None):
   """
   i4_sobol_generate generates a Sobol dataset.
 
   Parameters:
-    Input, integer M, the spatial dimension.
+    Input, integer dim_num, the spatial dimension.
     Input, integer N, the number of points to generate.
     Input, integer SKIP, the number of initial points to skip.
 
     Output, real R(M,N), the points.
   """
-  r=numpy.zeros((m,n))
+  if skip is None:
+      skip = 2
+      
+  r=numpy.zeros((dim_num,n))
   for j in xrange (1, n+1):
     seed = skip + j - 2
-    [ r[0:m,j-1], seed ] = i4_sobol ( m, seed )
+    [ r[0:dim_num,j-1], seed ] = i4_sobol ( dim_num, seed )
   return r
 
 def i4_sobol ( dim_num, seed ):
