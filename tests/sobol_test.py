@@ -10,9 +10,9 @@
     Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 
-from numpy import bitwise_xor
-from sobol_seq import i4_uniform, i4_bit_hi1 i4_bit_lo0, prime_ge
+import numpy as np
 import datetime
+from sobol_seq import i4_sobol, i4_uniform, i4_bit_hi1, i4_bit_lo0, prime_ge
 
 
 def sobol_test01():
@@ -27,13 +27,29 @@ def sobol_test01():
 
     seed = 123456789
 
-    for test in range(0, 10):
+    target = np.array([
+        [22, 96, 118],
+        [83, 56, 107],
+        [41,  6,  47],
+        [26, 11,  17],
+        [ 4, 64,  68],
+        [ 6, 45,  43],
+        [40, 76, 100],
+        [80,  0,  80],
+        [90, 35, 121],
+        [ 9,  1,   8]])
+
+    results = np.full((10, 3), np.nan)
+    for test in range(10):
 
         [i, seed] = i4_uniform(0, 100, seed)
         [j, seed] = i4_uniform(0, 100, seed)
-        k = bitwise_xor(i, j)
+        k = np.bitwise_xor(i, j)
+        results[test, :] = i, j, k
 
-        print('  %6d  %6d  %6d' % (i, j, k))
+        print('%6d  %6d  %6d' % (i, j, k))
+
+    assert np.all(target == results), "Array values not as expected"
 
     return
 
@@ -48,13 +64,30 @@ def sobol_test02():
 
     seed = 123456789
 
-    for test in range(0, 10):
+    target = np.array([
+        [22, 5],
+        [96, 7],
+        [83, 7],
+        [56, 6],
+        [41, 6],
+        [ 6, 3],
+        [26, 5],
+        [11, 4],
+        [ 4, 3],
+        [64, 7]])
+
+    results = np.full((10, 2), np.nan)
+    for test in range(10):
 
         [i, seed] = i4_uniform(0, 100, seed)
 
         j = i4_bit_hi1(i)
+        results[test, :] = i, j
 
         print('%6d %6d' % (i, j))
+
+    assert np.all(target == results), "Array values not as expected"
+
     return
 
 
@@ -68,13 +101,30 @@ def sobol_test03():
 
     seed = 123456789
 
-    for test in range(0, 10):
+    target = ([
+        [22, 1],
+        [96, 1],
+        [83, 3],
+        [56, 1],
+        [41, 2],
+        [ 6, 1],
+        [26, 1],
+        [11, 3],
+        [ 4, 1],
+        [64, 1]])
+
+    results = np.full((10, 2), np.nan)
+    for test in range(10):
 
         [i, seed] = i4_uniform(0, 100, seed)
-
         j = i4_bit_lo0(i)
 
+        results[test, :] = i, j
+
         print('%6d %6d' % (i, j))
+
+    assert np.all(target == results), "Array values not as expected"
+
     return
 
 
@@ -89,6 +139,45 @@ def sobol_test04():
 
     dim_max = 4
 
+    target = {
+        2: np.array([
+            [  0,   1, 0.000000,  0.000000],
+            [  1,   2, 0.500000,  0.500000],
+            [  2,   3, 0.750000,  0.250000],
+            [  3,   4, 0.250000,  0.750000],
+            [  4,   5, 0.375000,  0.375000],
+            # ......................
+            [106, 107, 0.9765625, 0.1953125],
+            [107, 108, 0.4765625, 0.6953125],
+            [108, 109, 0.3515625, 0.0703125],
+            [109, 110, 0.8515625, 0.5703125],
+            [110, 111, 0.6015625, 0.3203125]]),
+        3: np.array([
+            [  0,   1, 0.000000,  0.000000,  0.000000],
+            [  1,   2, 0.500000,  0.500000,  0.500000],
+            [  2,   3, 0.750000,  0.250000,  0.750000],
+            [  3,   4, 0.250000,  0.750000,  0.250000],
+            [  4,   5, 0.375000,  0.375000,  0.625000],
+            # ......................
+            [106, 107, 0.9765625, 0.1953125, 0.4921875],
+            [107, 108, 0.4765625, 0.6953125, 0.9921875],
+            [108, 109, 0.3515625, 0.0703125, 0.1171875],
+            [109, 110, 0.8515625, 0.5703125, 0.6171875],
+            [110, 111, 0.6015625, 0.3203125, 0.8671875]]),
+        4: np.array([
+            [  0,   1, 0.000000,  0.000000,  0.000000,  0.000000],
+            [  1,   2, 0.500000,  0.500000,  0.500000,  0.500000],
+            [  2,   3, 0.750000,  0.250000,  0.750000,  0.250000],
+            [  3,   4, 0.250000,  0.750000,  0.250000,  0.750000],
+            [  4,   5, 0.375000,  0.375000,  0.625000,  0.125000],
+            # ......................
+            [106, 107, 0.9765625, 0.1953125, 0.4921875, 0.6640625],
+            [107, 108, 0.4765625, 0.6953125, 0.9921875, 0.1640625],
+            [108, 109, 0.3515625, 0.0703125, 0.1171875, 0.7890625],
+            [109, 110, 0.8515625, 0.5703125, 0.6171875, 0.2890625],
+            [110, 111, 0.6015625, 0.3203125, 0.8671875, 0.5390625]])}
+
+
     for dim_num in range(2, dim_max + 1):
 
         seed = 0
@@ -97,16 +186,23 @@ def sobol_test04():
         print('\n  Using dimension DIM_NUM =   %d' % dim_num)
         print('\n  Seed   Seed    I4_SOBOL'
               '  In     Out\n')
-        for i in range(0, 111):
+
+        results = np.full((111, 2 + dim_num), np.nan)
+        for i in range(111):
             [r, seed_out] = i4_sobol(dim_num, seed)
-            if (i <= 11 or 95 <= i):
+            if (i < 5 or 105 < i):
                 out = '%6d %6d  ' % (seed, seed_out)
-                for j in range(0, dim_num):
+                for j in range(dim_num):
                     out += '%10f  ' % r[j]
                 print(out)
-            elif (i == 12):
-                print('......................')
+            elif (i == 6):
+                print('  ......................')
+            results[i, :] = [seed, seed_out] + list(r)
             seed = seed_out
+
+        assert np.all(target[dim_num][0:5, :] == results[0:5, :]), "Start of array doesn't match"
+        assert np.all(target[dim_num][5:10, :] == results[106:111, :]), "End of array doesn't match"
+
     return
 
 
@@ -123,6 +219,30 @@ def sobol_test05():
           '  to come back to any part of the sequence.'
           '')
 
+    target = np.array([
+    [  0,   1, 0.000000,  0.000000,  0.000000],
+    [  1,   2, 0.500000,  0.500000,  0.500000],
+    [  2,   3, 0.750000,  0.250000,  0.750000],
+    [  3,   4, 0.250000,  0.750000,  0.250000],
+    [  4,   5, 0.375000,  0.375000,  0.625000],
+    [100, 101, 0.4140625, 0.2578125, 0.3046875],
+    [101, 102, 0.9140625, 0.7578125, 0.8046875],
+    [102, 103, 0.6640625, 0.0078125, 0.5546875],
+    [103, 104, 0.1640625, 0.5078125, 0.0546875],
+    [104, 105, 0.2265625, 0.4453125, 0.7421875],
+    [  3,   4, 0.250000,  0.750000,  0.250000],
+    [  4,   5, 0.375000,  0.375000,  0.625000],
+    [  5,   6, 0.875000,  0.875000,  0.125000],
+    [  6,   7, 0.625000,  0.125000,  0.375000],
+    [  7,   8, 0.125000,  0.625000,  0.875000],
+    [ 98,  99, 0.7890625, 0.3828125, 0.1796875],
+    [ 99, 100, 0.2890625, 0.8828125, 0.6796875],
+    [100, 101, 0.4140625, 0.2578125, 0.3046875],
+    [101, 102, 0.9140625, 0.7578125, 0.8046875],
+    [102, 103, 0.6640625, 0.0078125, 0.5546875]])
+
+    results = np.full_like(target, np.nan)
+
     dim_num = 3
 
     print(''
@@ -135,12 +255,13 @@ def sobol_test05():
           '  In    Out'
           '')
 
-    for i in range(0, 10 + 1):
+    for i in range(5):
         [r, seed_out] = i4_sobol(dim_num, seed)
         out = '%6d %6d  ' % (seed, seed_out)
         for j in range(1, dim_num + 1):
             out += '%10f  ' % r[j - 1]
         print(out)
+        results[i, :] = [seed, seed_out] + list(r)
         seed = seed_out
 
     print(''
@@ -154,12 +275,13 @@ def sobol_test05():
           '  In    Out'
           '')
 
-    for i in range(1, 6):
+    for i in range(5):
         [r, seed_out] = i4_sobol(dim_num, seed)
         out = '%6d %6d  ' % (seed, seed_out)
         for j in range(1, dim_num + 1):
             out += '%10f  ' % r[j - 1]
         print(out)
+        results[5 + i, :] = [seed, seed_out] + list(r)
         seed = seed_out
     print(''
           '  Jump back by decreasing SEED:'
@@ -172,12 +294,13 @@ def sobol_test05():
           '  In    Out'
           '')
 
-    for i in range(0, 11):
+    for i in range(5):
         [r, seed_out] = i4_sobol(dim_num, seed)
         out = '%6d %6d  ' % (seed, seed_out)
         for j in range(1, dim_num + 1):
             out += '%10f  ' % r[j - 1]
         print(out)
+        results[10 + i, :] = [seed, seed_out] + list(r)
         seed = seed_out
 
     print(''
@@ -191,18 +314,21 @@ def sobol_test05():
           '  In    Out'
           '')
 
-    for i in range(1, 6):
+    for i in range(5):
         [r, seed_out] = i4_sobol(dim_num, seed)
         out = '%6d %6d  ' % (seed, seed_out)
         for j in range(1, dim_num + 1):
             out += '%10f  ' % r[j - 1]
         print(out)
+        results[15 + i, :] = [seed, seed_out] + list(r)
         seed = seed_out
+
+    assert np.all(target == results)
 
     return
 
-# MAIN #############
 
+# MAIN #############
 
 def main(argv=None):
     d = datetime.datetime.today()
