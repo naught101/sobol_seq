@@ -124,7 +124,7 @@ def i4_sobol_generate ( m, n, skip ):
     Output, real R(M,N), the points.
   """
   r=numpy.zeros((m,n))
-  for j in xrange (1, n+1):
+  for j in range (1, n+1):
     seed = skip + j - 2
     [ r[0:m,j-1], seed ] = i4_sobol ( m, seed )
   return r
@@ -189,7 +189,7 @@ def i4_sobol ( dim_num, seed ):
   global seed_save
   global v
 
-  if ( not 'initialized' in globals().keys() ):
+  if ( not 'initialized' in list(globals().keys()) ):
     initialized = 0
     dim_num_save = -1
 
@@ -266,16 +266,16 @@ def i4_sobol ( dim_num, seed ):
 
 #  Check parameters.
     if ( dim_num < 1 or dim_max < dim_num ):
-      print 'I4_SOBOL - Fatal error!'
-      print '  The spatial dimension DIM_NUM should satisfy:'
-      print '    1 <= DIM_NUM <= %d'%dim_max
-      print '  But this input value is DIM_NUM = %d'%dim_num
+      print('I4_SOBOL - Fatal error!')
+      print('  The spatial dimension DIM_NUM should satisfy:')
+      print('    1 <= DIM_NUM <= %d'%dim_max)
+      print('  But this input value is DIM_NUM = %d'%dim_num)
       return
 
     dim_num_save = dim_num
 
 #  Initialize the remaining rows of V.
-    for i in xrange(2 , dim_num+1):
+    for i in range(2 , dim_num+1):
 
 #  The bits of the integer POLY(I) gives the form of polynomial I.
 #  Find the degree of polynomial I from binary encoding.
@@ -290,17 +290,17 @@ def i4_sobol ( dim_num, seed ):
 #  Expand this bit pattern to separate components of the logical array INCLUD.
       j = poly[i-1]
       includ=numpy.zeros(m)
-      for k in xrange(m, 0, -1):
+      for k in range(m, 0, -1):
         j2 = math.floor ( j / 2. )
         includ[k-1] =  (j != 2 * j2 )
         j = j2
 
 #  Calculate the remaining elements of row I as explained
 #  in Bratley and Fox, section 2.
-      for j in xrange( m+1, maxcol+1 ):
+      for j in range( m+1, maxcol+1 ):
         newv = v[i-1,j-m-1]
         l = 1
-        for k in xrange(1, m+1):
+        for k in range(1, m+1):
           l = 2 * l
           if ( includ[k-1] ):
             newv = numpy.bitwise_xor ( int(newv), int(l * v[i-1,j-k-1]) )
@@ -308,7 +308,7 @@ def i4_sobol ( dim_num, seed ):
 
 #  Multiply columns of V by appropriate power of 2.
     l = 1
-    for j in xrange( maxcol-1, 0, -1):
+    for j in range( maxcol-1, 0, -1):
       l = 2 * l
       v[0:dim_num,j-1] = v[0:dim_num,j-1] * l
 
@@ -336,33 +336,33 @@ def i4_sobol ( dim_num, seed ):
     l = 1
     lastq=numpy.zeros(dim_num)
 
-    for seed_temp in xrange( int(seed_save), int(seed)):
+    for seed_temp in range( int(seed_save), int(seed)):
       l = i4_bit_lo0 ( seed_temp )
-      for i in xrange(1 , dim_num+1):
+      for i in range(1 , dim_num+1):
         lastq[i-1] = numpy.bitwise_xor ( int(lastq[i-1]), int(v[i-1,l-1]) )
 
     l = i4_bit_lo0 ( seed )
 
   elif ( seed_save + 1 < seed ):
 
-    for seed_temp in xrange( int(seed_save + 1), int(seed) ):
+    for seed_temp in range( int(seed_save + 1), int(seed) ):
       l = i4_bit_lo0 ( seed_temp )
-      for i in xrange(1, dim_num+1):
+      for i in range(1, dim_num+1):
         lastq[i-1] = numpy.bitwise_xor ( int(lastq[i-1]), int(v[i-1,l-1]) )
 
     l = i4_bit_lo0 ( seed )
 
 #  Check that the user is not calling too many times!
   if ( maxcol < l ):
-    print 'I4_SOBOL - Fatal error!'
-    print '  Too many calls!'
-    print '  MAXCOL = %d\n'%maxcol
-    print '  L =      %d\n'%l
+    print('I4_SOBOL - Fatal error!')
+    print('  Too many calls!')
+    print('  MAXCOL = %d\n'%maxcol)
+    print('  L =      %d\n'%l)
     return
 
 #  Calculate the new components of QUASI.
   quasi=numpy.zeros(dim_num)
-  for i in xrange( 1, dim_num+1):
+  for i in range( 1, dim_num+1):
     quasi[i-1] = lastq[i-1] * recipd
     lastq[i-1] = numpy.bitwise_xor ( int(lastq[i-1]), int(v[i-1,l-1]) )
 
@@ -410,8 +410,8 @@ def i4_uniform ( a, b, seed ):
     Output, integer SEED, the updated seed.
   """
   if ( seed == 0 ):
-    print 'I4_UNIFORM - Fatal error!'
-    print '  Input SEED = 0!'
+    print('I4_UNIFORM - Fatal error!')
+    print('  Input SEED = 0!')
 
   seed = math.floor ( seed )
   a = round ( a )
