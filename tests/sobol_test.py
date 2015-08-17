@@ -19,10 +19,11 @@ def sobol_test01():
     """
     sobol_test01 tests bitxor.
     """
-    print('\nSOBOL_TEST01')
-    print('  BITXOR is a MATLAB intrinsic function which returns')
-    print('  the bitwise exclusive OR of two integers.')
-    print('\n     I     J     BITXOR(I,J)\n')
+    print('\nSOBOL_TEST01'
+          '------------'
+          '  BITXOR is a MATLAB intrinsic function which returns'
+          '  the bitwise exclusive OR of two integers.'
+          '\n     I     J     BITXOR(I,J)')
 
     seed = 123456789
 
@@ -41,9 +42,9 @@ def sobol_test02():
     """
     sobol_test02 tests i4_bit_hi1.
     """
-    print('\nSOBOL_TEST02')
-    print('  I4_BIT_HI1 returns the location of the high 1 bit.')
-    print('\n     I     I4_BIT_HI1(I)\n')
+    print('\nSOBOL_TEST02'
+          '  I4_BIT_HI1 returns the location of the high 1 bit.'
+          '\n     I     I4_BIT_HI1(I)\n')
 
     seed = 123456789
 
@@ -61,9 +62,9 @@ def sobol_test03():
     """
     sobol_test03 tests i4_bit_lo0.
     """
-    print('\nSOBOL_TEST03')
-    print('  I4_BIT_LO0 returns the location of the low 0 bit.')
-    print('\n     I     I4_BIT_LO0(I)')
+    print('\nSOBOL_TEST03'
+          '  I4_BIT_LO0 returns the location of the low 0 bit.'
+          '\n     I     I4_BIT_LO0(I)')
 
     seed = 123456789
 
@@ -81,10 +82,10 @@ def sobol_test04():
     """
     sobol_test04 tests i4_sobol.
     """
-    print('\nSOBOL_TEST04')
-    print('  I4_SOBOL returns the next element')
-    print('  of a Sobol sequence.')
-    print('\n  In this test, we call I4_SOBOL repeatedly.\n')
+    print('\nSOBOL_TEST04'
+          '  I4_SOBOL returns the next element'
+          '  of a Sobol sequence.'
+          '\n  In this test, we call I4_SOBOL repeatedly.')
 
     dim_max = 4
 
@@ -94,8 +95,8 @@ def sobol_test04():
         qs = prime_ge(dim_num)
 
         print('\n  Using dimension DIM_NUM =   %d' % dim_num)
-        print('\n  Seed  Seed   I4_SOBOL')
-        print('  In    Out\n')
+        print('\n  Seed   Seed    I4_SOBOL'
+              '  In     Out\n')
         for i in range(0, 111):
             [r, seed_out] = i4_sobol(dim_num, seed)
             if (i <= 11 or 95 <= i):
@@ -113,26 +114,26 @@ def sobol_test05():
     """
     sobol_test05 tests i4_sobol.
     """
-    print('')
-    print('SOBOL_TEST05')
-    print('  I4_SOBOL computes the next element of a Sobol sequence.')
-    print('')
-    print('  In this test, we demonstrate how the SEED can be')
-    print('  manipulated to skip ahead in the sequence, or')
-    print('  to come back to any part of the sequence.')
-    print('')
+    print(''
+          'SOBOL_TEST05'
+          '  I4_SOBOL computes the next element of a Sobol sequence.'
+          ''
+          '  In this test, we demonstrate how the SEED can be'
+          '  manipulated to skip ahead in the sequence, or'
+          '  to come back to any part of the sequence.'
+          '')
 
     dim_num = 3
 
-    print('')
-    print('  Using dimension DIM_NUM =   %d\n' % dim_num)
+    print(''
+          '  Using dimension DIM_NUM =   %d\n' % dim_num)
 
     seed = 0
 
-    print('')
-    print('  Seed  Seed   I4_SOBOL')
-    print('  In    Out')
-    print('')
+    print(''
+          '  Seed  Seed   I4_SOBOL'
+          '  In    Out'
+          '')
 
     for i in range(0, 10 + 1):
         [r, seed_out] = i4_sobol(dim_num, seed)
@@ -142,16 +143,16 @@ def sobol_test05():
         print(out)
         seed = seed_out
 
-    print('')
-    print('  Jump ahead by increasing SEED:')
-    print('')
+    print(''
+          '  Jump ahead by increasing SEED:'
+          '')
 
     seed = 100
 
-    print('')
-    print('  Seed  Seed   I4_SOBOL')
-    print('  In    Out')
-    print('')
+    print(''
+          '  Seed  Seed   I4_SOBOL'
+          '  In    Out'
+          '')
 
     for i in range(1, 6):
         [r, seed_out] = i4_sobol(dim_num, seed)
@@ -160,16 +161,16 @@ def sobol_test05():
             out += '%10f  ' % r[j - 1]
         print(out)
         seed = seed_out
-    print('')
-    print('  Jump back by decreasing SEED:')
-    print('')
+    print(''
+          '  Jump back by decreasing SEED:'
+          '')
 
     seed = 3
 
-    print('')
-    print('  Seed  Seed   I4_SOBOL')
-    print('  In    Out')
-    print('')
+    print(''
+          '  Seed  Seed   I4_SOBOL'
+          '  In    Out'
+          '')
 
     for i in range(0, 11):
         [r, seed_out] = i4_sobol(dim_num, seed)
@@ -179,16 +180,16 @@ def sobol_test05():
         print(out)
         seed = seed_out
 
-    print('')
-    print('  Jump back by decreasing SEED:')
-    print('')
+    print(''
+          '  Jump back by decreasing SEED:'
+          '')
 
     seed = 98
 
-    print('')
-    print('  Seed  Seed   I4_SOBOL')
-    print('  In    Out')
-    print('')
+    print(''
+          '  Seed  Seed   I4_SOBOL'
+          '  In    Out'
+          '')
 
     for i in range(1, 6):
         [r, seed_out] = i4_sobol(dim_num, seed)
@@ -206,8 +207,8 @@ def sobol_test05():
 def main(argv=None):
     d = datetime.datetime.today()
     print(d.strftime("%d-%b-%Y %H:%M:%S"))
-    print('\nSOBOL_TEST')
-    print('  Test the MATLAB SOBOL routines.')
+    print('\nSOBOL_TEST'
+          '  Test the MATLAB SOBOL routines.')
 
     sobol_test01()
     sobol_test02()
@@ -215,8 +216,8 @@ def main(argv=None):
     sobol_test04()
     sobol_test05()
 
-    print('SOBOL_TEST')
-    print('  Normal end of execution.')
+    print('SOBOL_TEST'
+          '  Normal end of execution.')
 
     d = datetime.datetime.today()
     print(d.strftime("%d-%b-%Y %H:%M:%S"))
