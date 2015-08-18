@@ -46,9 +46,5 @@ sobol_seq.i4_sobol_generate(3, 5)
 
 Use 'i4_sobol_generate' to generate a Sobol sequence.
 
-
-
-```
-
 All functions have detailed documentation available via `help(func)`.
 
