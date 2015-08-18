@@ -12,7 +12,7 @@
 
 import numpy as np
 import datetime
-from sobol_seq import i4_sobol, i4_uniform, i4_bit_hi1, i4_bit_lo0, prime_ge
+from sobol_seq import i4_sobol, i4_sobol_generate, i4_uniform, i4_bit_hi1, i4_bit_lo0, prime_ge
 
 
 def sobol_test01():
@@ -324,6 +324,33 @@ def sobol_test05():
         seed = seed_out
 
     assert np.all(target == results)
+
+    return
+
+
+def sobol_test_generate():
+    """
+    sobol_test02 tests i4_sobol_generate.
+    """
+    print('\nSOBOL_TEST_GENERATE'
+          '  I4_BIT_ returns the location of the high 1 bit.'
+          '\n     I     I4_BIT_HI1(I)\n')
+
+    target = np.array([
+       [    0.5,     0.5,     0.5,     0.5,     0.5],
+       [   0.75,    0.25,    0.75,    0.25,    0.75],
+       [   0.25,    0.75,    0.25,    0.75,    0.25],
+       [  0.375,   0.375,   0.625,   0.125,   0.875],
+       [  0.875,   0.875,   0.125,   0.625,   0.375],
+       [  0.625,   0.125,   0.375,   0.375,   0.125],
+       [  0.125,   0.625,   0.875,   0.875,   0.625],
+       [ 0.1875,  0.3125,  0.3125,  0.6875,  0.5625],
+       [ 0.6875,  0.8125,  0.8125,  0.1875,  0.0625],
+       [ 0.9375,  0.0625,  0.5625,  0.9375,  0.3125]])
+
+    results = i4_sobol_generate(5, 10)
+
+    assert np.all(target == results), "Array values not as expected"
 
     return
 
