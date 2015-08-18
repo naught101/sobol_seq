@@ -116,7 +116,7 @@ def i4_bit_lo0(n):
     return bit
 
 
-def i4_sobol_generate(dim_num, n, skip=None):
+def i4_sobol_generate(dim_num, n, skip=1):
     """
     i4_sobol_generate generates a Sobol dataset.
 
@@ -127,13 +127,11 @@ def i4_sobol_generate(dim_num, n, skip=None):
 
       Output, real R(M,N), the points.
     """
-    if skip is None:
-        skip = 2
+    r = numpy.full((n, dim_num), numpy.nan)
+    for j in range(n):
+        seed = j + 1
+        r[j, 0:dim_num], next_seed = i4_sobol(dim_num, seed)
 
-    r = numpy.zeros((dim_num, n))
-    for j in range(1, n + 1):
-        seed = skip + j - 2
-        [r[0:dim_num, j - 1], seed] = i4_sobol(dim_num, seed)
     return r
 
 
