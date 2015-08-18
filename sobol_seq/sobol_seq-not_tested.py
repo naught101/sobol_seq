@@ -13,7 +13,7 @@
     Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 
-import math
+import numpy as np
 
 
 def r4_uniform_01(seed):
@@ -70,14 +70,14 @@ def r4_uniform_01(seed):
       normally be used as the input seed on the next call.
     """
 
-    seed = math.floor(seed)
+    seed = np.floor(seed)
 
-    seed = mod(seed, 2147483647)
+    seed = np.mod(seed, 2147483647)
 
     if seed < 0:
         seed = seed + 2147483647
 
-    k = math.floor(seed / 127773)
+    k = np.floor(seed / 127773)
 
     seed = 16807 * (seed - k * 127773) - k * 2836
 
