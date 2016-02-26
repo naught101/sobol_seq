@@ -482,8 +482,8 @@ def prime_ge(n):
       than or equal to N.
     """
     p = max(np.ceil(n), 2)
-    while (not is_prime(p)):
-        p = p + 1
+    while not is_prime(p):
+        p += 1
 
     return p
 
@@ -499,9 +499,13 @@ def is_prime(n):
     """
     if n != int(n) or n < 1:
         return False
-    p = 2
-    while p < n:
-        if n % p == 0:
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    # All primes >3 are of the form 6n+1 or 6n+5 (6n, 6n+2, 6n+4 are 2-divisible, 6n+3 is 3-divisible)
+    p = 5
+    root = np.sqrt(n)
+    while p < root:
+        if n % p == 0 or n % (p + 2) == 0:
             return False
-        p += 1
+        p += 6
     return True
