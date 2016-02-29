@@ -15,6 +15,7 @@
     Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 
+from __future__ import division
 import numpy as np
 
 __all__ = ['i4_bit_hi1', 'i4_bit_lo0', 'i4_sobol_generate',
@@ -61,7 +62,7 @@ def i4_bit_hi1(n):
     bit = 0
     while i > 0:
         bit += 1
-        i = np.floor(i / 2.)
+        i //= 2
     return bit
 
 
@@ -101,15 +102,11 @@ def i4_bit_lo0(n):
 
       Output, integer BIT, the position of the low 1 bit.
     """
-    bit = 0
+    bit = 1
     i = np.floor(n)
-    while True:
+    while i != 2 * (i // 2):
         bit += 1
-        i2 = np.floor(i / 2.)
-        if i == 2 * i2:
-            break
-
-        i = i2
+        i //= 2
     return bit
 
 
@@ -284,15 +281,16 @@ def i4_sobol(dim_num, seed):
             #  Find the degree of polynomial I from binary encoding.
             j = poly[i - 1]
             m = 0
+            j //= 2
             while j > 0:
-                j = np.floor(j / 2.)
+                j //= 2
                 m += 1
 
             #  Expand this bit pattern to separate components of the logical array INCLUD.
             j = poly[i - 1]
             includ = np.zeros(m)
             for k in range(m, 0, -1):
-                j2 = np.floor(j / 2.)
+                j2 = j // 2
                 includ[k - 1] = (j != 2 * j2)
                 j = j2
 
@@ -427,7 +425,7 @@ def i4_uniform(a, b, seed):
     if seed < 0:
         seed += 2147483647
 
-    k = np.floor(seed / 127773)
+    k = seed // 127773
 
     seed = 16807 * (seed - k * 127773) - k * 2836
 
