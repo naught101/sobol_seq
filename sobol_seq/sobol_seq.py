@@ -496,14 +496,16 @@ def is_prime(n):
 
        Output, boolean value, True or False
     """
-    if n != int(n) or n < 1:
+    if n != int(n) or n < 2:
         return False
+    if n == 2 or n == 3:
+        return True
     if n % 2 == 0 or n % 3 == 0:
         return False
     # All primes >3 are of the form 6n+1 or 6n+5 (6n, 6n+2, 6n+4 are 2-divisible, 6n+3 is 3-divisible)
     p = 5
-    root = np.sqrt(n)
-    while p < root:
+    root = int(np.ceil(np.sqrt(n)))
+    while p <= root:
         if n % p == 0 or n % (p + 2) == 0:
             return False
         p += 6
