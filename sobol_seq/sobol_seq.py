@@ -59,9 +59,7 @@ def i4_bit_hi1(n):
     """
     i = np.floor(n)
     bit = 0
-    while True:
-        if i <= 0:
-            break
+    while i > 0:
         bit += 1
         i = np.floor(i / 2.)
     return bit
@@ -286,10 +284,8 @@ def i4_sobol(dim_num, seed):
             #  Find the degree of polynomial I from binary encoding.
             j = poly[i - 1]
             m = 0
-            while True:
+            while j > 0:
                 j = np.floor(j / 2.)
-                if j <= 0:
-                    break
                 m += 1
 
             #  Expand this bit pattern to separate components of the logical array INCLUD.
@@ -436,7 +432,7 @@ def i4_uniform(a, b, seed):
     seed = 16807 * (seed - k * 127773) - k * 2836
 
     if seed < 0:
-        seed = seed + 2147483647
+        seed += 2147483647
 
     r = seed * 4.656612875E-10
 
