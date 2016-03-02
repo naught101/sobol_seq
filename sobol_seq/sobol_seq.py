@@ -15,6 +15,7 @@
     Original code is available from http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
 """
 
+from __future__ import division
 import numpy as np
 
 __all__ = ['i4_bit_hi1', 'i4_bit_lo0', 'i4_sobol_generate',
@@ -59,11 +60,9 @@ def i4_bit_hi1(n):
     """
     i = np.floor(n)
     bit = 0
-    while (1):
-        if (i <= 0):
-            break
+    while i > 0:
         bit += 1
-        i = np.floor(i / 2.)
+        i //= 2
     return bit
 
 
@@ -103,15 +102,11 @@ def i4_bit_lo0(n):
 
       Output, integer BIT, the position of the low 1 bit.
     """
-    bit = 0
+    bit = 1
     i = np.floor(n)
-    while (1):
-        bit = bit + 1
-        i2 = np.floor(i / 2.)
-        if (i == 2 * i2):
-            break
-
-        i = i2
+    while i != 2 * (i // 2):
+        bit += 1
+        i //= 2
     return bit
 
 
@@ -198,14 +193,14 @@ def i4_sobol(dim_num, seed):
         initialized = 0
         dim_num_save = -1
 
-    if (not initialized or dim_num != dim_num_save):
+    if not initialized or dim_num != dim_num_save:
         initialized = 1
         dim_max = 40
         dim_num_save = -1
         log_max = 30
         seed_save = -1
 
-#  Initialize (part of) V.
+        #  Initialize (part of) V.
         v = np.zeros((dim_max, log_max))
         v[0:40, 0] = np.transpose([
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -250,7 +245,7 @@ def i4_sobol(dim_num, seed):
         v[37:40, 7] = np.transpose([
             7, 23, 39])
 
-#  Set POLY.
+        #  Set POLY.
         poly = [
             1,   3,   7,   11,  13,  19,  25,  37,  59,  47,
             61,  55,  41,  67,  97,  91,  109, 103, 115, 131,
@@ -259,18 +254,18 @@ def i4_sobol(dim_num, seed):
 
         atmost = 2 ** log_max - 1
 
-#  Find the number of bits in ATMOST.
+        #  Find the number of bits in ATMOST.
         maxcol = i4_bit_hi1(atmost)
 
-#  Initialize row 1 of V.
+        #  Initialize row 1 of V.
         v[0, 0:maxcol] = 1
 
 
-#  Things to do only if the dimension changed.
-    if (dim_num != dim_num_save):
+    #  Things to do only if the dimension changed.
+    if dim_num != dim_num_save:
 
-#  Check parameters.
-        if (dim_num < 1 or dim_max < dim_num):
+        #  Check parameters.
+        if dim_num < 1 or dim_max < dim_num:
             print('I4_SOBOL - Fatal error!')
             print('  The spatial dimension DIM_NUM should satisfy:')
             print('    1 <= DIM_NUM <= %d' % dim_max)
@@ -279,67 +274,65 @@ def i4_sobol(dim_num, seed):
 
         dim_num_save = dim_num
 
-#  Initialize the remaining rows of V.
+        #  Initialize the remaining rows of V.
         for i in range(2, dim_num + 1):
 
-#  The bits of the integer POLY(I) gives the form of polynomial I.
-#  Find the degree of polynomial I from binary encoding.
+            #  The bits of the integer POLY(I) gives the form of polynomial I.
+            #  Find the degree of polynomial I from binary encoding.
             j = poly[i - 1]
             m = 0
-            while (1):
-                j = np.floor(j / 2.)
-                if (j <= 0):
-                    break
-                m = m + 1
+            j //= 2
+            while j > 0:
+                j //= 2
+                m += 1
 
-#  Expand this bit pattern to separate components of the logical array INCLUD.
+            #  Expand this bit pattern to separate components of the logical array INCLUD.
             j = poly[i - 1]
             includ = np.zeros(m)
             for k in range(m, 0, -1):
-                j2 = np.floor(j / 2.)
+                j2 = j // 2
                 includ[k - 1] = (j != 2 * j2)
                 j = j2
 
-#  Calculate the remaining elements of row I as explained
-#  in Bratley and Fox, section 2.
+            #  Calculate the remaining elements of row I as explained
+            #  in Bratley and Fox, section 2.
             for j in range(m + 1, maxcol + 1):
                 newv = v[i - 1, j - m - 1]
                 l = 1
                 for k in range(1, m + 1):
-                    l = 2 * l
-                    if (includ[k - 1]):
+                    l *= 2
+                    if includ[k - 1]:
                         newv = np.bitwise_xor(
                             int(newv), int(l * v[i - 1, j - k - 1]))
                 v[i - 1, j - 1] = newv
 
-#  Multiply columns of V by appropriate power of 2.
+        #  Multiply columns of V by appropriate power of 2.
         l = 1
         for j in range(maxcol - 1, 0, -1):
-            l = 2 * l
+            l *= 2
             v[0:dim_num, j - 1] = v[0:dim_num, j - 1] * l
 
-#  RECIPD is 1/(common denominator of the elements in V).
+        #  RECIPD is 1/(common denominator of the elements in V).
         recipd = 1.0 / (2 * l)
         lastq = np.zeros(dim_num)
 
     seed = int(np.floor(seed))
 
-    if (seed < 0):
+    if seed < 0:
         seed = 0
 
-    if (seed == 0):
-        l = 1
+    l = 1
+    if seed == 0:
         lastq = np.zeros(dim_num)
 
-    elif (seed == seed_save + 1):
+    elif seed == seed_save + 1:
 
-#  Find the position of the right-hand zero in SEED.
+        #  Find the position of the right-hand zero in SEED.
         l = i4_bit_lo0(seed)
 
-    elif (seed <= seed_save):
+    elif seed <= seed_save:
 
         seed_save = 0
-        l = 1
         lastq = np.zeros(dim_num)
 
         for seed_temp in range(int(seed_save), int(seed)):
@@ -350,7 +343,7 @@ def i4_sobol(dim_num, seed):
 
         l = i4_bit_lo0(seed)
 
-    elif (seed_save + 1 < seed):
+    elif seed_save + 1 < seed:
 
         for seed_temp in range(int(seed_save + 1), int(seed)):
             l = i4_bit_lo0(seed_temp)
@@ -360,15 +353,15 @@ def i4_sobol(dim_num, seed):
 
         l = i4_bit_lo0(seed)
 
-#  Check that the user is not calling too many times!
-    if (maxcol < l):
+    #  Check that the user is not calling too many times!
+    if maxcol < l:
         print('I4_SOBOL - Fatal error!')
         print('  Too many calls!')
         print('  MAXCOL = %d\n' % maxcol)
         print('  L =      %d\n' % l)
         return
 
-#  Calculate the new components of QUASI.
+    #  Calculate the new components of QUASI.
     quasi = np.zeros(dim_num)
     for i in range(1, dim_num + 1):
         quasi[i - 1] = lastq[i - 1] * recipd
@@ -376,7 +369,7 @@ def i4_sobol(dim_num, seed):
             int(lastq[i - 1]), int(v[i - 1, l - 1]))
 
     seed_save = seed
-    seed = seed + 1
+    seed += 1
 
     return [quasi, seed]
 
@@ -419,7 +412,7 @@ def i4_uniform(a, b, seed):
       Output, integer C, the randomly chosen integer.
       Output, integer SEED, the updated seed.
     """
-    if (seed == 0):
+    if seed == 0:
         print('I4_UNIFORM - Fatal error!')
         print('  Input SEED = 0!')
 
@@ -429,22 +422,22 @@ def i4_uniform(a, b, seed):
 
     seed = np.mod(seed, 2147483647)
 
-    if (seed < 0):
-        seed = seed + 2147483647
+    if seed < 0:
+        seed += 2147483647
 
-    k = np.floor(seed / 127773)
+    k = seed // 127773
 
     seed = 16807 * (seed - k * 127773) - k * 2836
 
-    if (seed < 0):
-        seed = seed + 2147483647
+    if seed < 0:
+        seed += 2147483647
 
     r = seed * 4.656612875E-10
 
-#  Scale R to lie between A-0.5 and B+0.5.
+    #  Scale R to lie between A-0.5 and B+0.5.
     r = (1.0 - r) * (min(a, b) - 0.5) + r * (max(a, b) + 0.5)
 
-#  Use rounding to convert R to an integer between A and B.
+    #  Use rounding to convert R to an integer between A and B.
     value = round(r)
 
     value = max(value, min(a, b))
@@ -482,8 +475,8 @@ def prime_ge(n):
       than or equal to N.
     """
     p = max(np.ceil(n), 2)
-    while (not is_prime(p)):
-        p = p + 1
+    while not is_prime(p):
+        p += 1
 
     return p
 
@@ -497,11 +490,17 @@ def is_prime(n):
 
        Output, boolean value, True or False
     """
-    if n != int(n) or n < 1:
+    if n != int(n) or n < 2:
         return False
-    p = 2
-    while p < n:
-        if n % p == 0:
+    if n == 2 or n == 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    # All primes >3 are of the form 6n+1 or 6n+5 (6n, 6n+2, 6n+4 are 2-divisible, 6n+3 is 3-divisible)
+    p = 5
+    root = int(np.ceil(np.sqrt(n)))
+    while p <= root:
+        if n % p == 0 or n % (p + 2) == 0:
             return False
-        p += 1
+        p += 6
     return True
