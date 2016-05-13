@@ -44,5 +44,19 @@ sobol_seq.i4_sobol_generate(3, 5)
 #        [ 0.875,  0.875,  0.125]])
 ```
 
+Use `i4_sobol_generate_std_normal` to generate multivariate standard normal quasi-random variables.
+
+
+```{python}
+# To generate the first 5 realisations of a 3-dim standard multivariate normal quasi-random variable, run:
+sobol_seq.i4_sobol_generate_std_normal(3, 5)
+
+# array([[ 0.        ,  0.        ,  0.        ],
+#       [ 0.67448975, -0.67448975,  0.67448975],
+#       [-0.67448975,  0.67448975, -0.67448975],
+#       [-0.31863936, -0.31863936,  0.31863936],
+#       [ 1.15034938,  1.15034938, -1.15034938]])
+```
+
 All functions have detailed documentation available via `help(func)`.
 
