@@ -1,12 +1,7 @@
-Python Sobol sequence implementation.
+# Sobol sequence implementation in python
 [Sobol sequences](https://en.wikipedia.org/wiki/Sobol_sequence) are quasi-random low-discrepancy sequences that are useful for creating sample distributions.
 
-The original code that this package is based on is by John Burkardt and Corrado Chisari.
-The original version is available from:
-http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html
-
-Installation
-------------
+## Installation ##
 
 Install as usual with setuptools - source available from https://github.com/naught101/sobol_seq.
 
@@ -14,8 +9,7 @@ Or a decent package manager like [conda](http://conda.pydata.org/docs/):
 
     conda install -c https://conda.binstar.org/naught101 sobol_seq
 
-Usage
------
+## Usage ##
 
 Use `i4_sobol` to generate a single Sobol vector:
 
@@ -32,7 +26,7 @@ seed
 vec,seed=sobol_seq.i4_sobol(4, seed)
 ```
 
-Use `i4_sobol_generate` to generate a Sobol sequence:
+Use `i4_sobol_generate` to generate a Sobol sequence. For example, if you want to have the first 5 three-dimensional Sobol numbers, run:
 
 ```{python}
 sobol_seq.i4_sobol_generate(3, 5)
@@ -44,11 +38,9 @@ sobol_seq.i4_sobol_generate(3, 5)
 #        [ 0.875,  0.875,  0.125]])
 ```
 
-Use `i4_sobol_generate_std_normal` to generate multivariate standard normal quasi-random variables.
-
+Use `i4_sobol_generate_std_normal` to generate (multivariate) standard normal quasi-random variables. For example, if you want to have the first 5 realisations of a three-dimensional standard normal quasi-random variable, run:
 
 ```{python}
-# To generate the first 5 realisations of a 3-dim standard multivariate normal quasi-random variable, run:
 sobol_seq.i4_sobol_generate_std_normal(3, 5)
 
 # array([[ 0.        ,  0.        ,  0.        ],
@@ -60,3 +52,6 @@ sobol_seq.i4_sobol_generate_std_normal(3, 5)
 
 All functions have detailed documentation available via `help(func)`.
 
+## License ##
+
+This package is heavily based on [Sobol](http://people.sc.fsu.edu/~jburkardt/py_src/sobol/sobol.html), a Python library for generating Sobols by John Burkardt and Corrado Chisari who made their code available under the MIT license. Any additions and/or changes to their code are also made available under the MIT license.
