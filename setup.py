@@ -8,4 +8,8 @@ setup(name='sobol_seq',
       author_email='naught101@gmail.com',
       license='MIT',
       packages=['sobol_seq'],
+      install_requires=[
+          'scipy',
+          'numpy'
+      ],
       zip_safe=False)
