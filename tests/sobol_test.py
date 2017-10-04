@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
   Licensing:
-    This code is distributed under the GNU LGPL license.
+    This code is distributed under the MIT license.
 
   Author:
     Original MATLAB version by John Burkardt.

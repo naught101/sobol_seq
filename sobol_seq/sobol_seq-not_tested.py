@@ -1,6 +1,6 @@
 """
   Licensing:
-    This code is distributed under the GNU LGPL license.
+    This code is distributed under the MIT license.
 
   Authors:
     Original FORTRAN77 version of tau_sobol by Bennett Fox.
