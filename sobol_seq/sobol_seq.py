@@ -111,7 +111,7 @@ def i4_bit_lo0(n):
     return bit
 
 
-def i4_sobol_generate(dim_num, n, skip=1):
+def i4_sobol_generate(dim_num, n, skip=0):
     """
     i4_sobol_generate generates a Sobol dataset.
 
@@ -124,13 +124,12 @@ def i4_sobol_generate(dim_num, n, skip=1):
     """
     r = np.full((n, dim_num), np.nan)
     for j in range(n):
-        seed = j + skip
-        r[j, 0:dim_num], next_seed = i4_sobol(dim_num, seed)
+        r[j, :], _ = i4_sobol(dim_num, seed=1+skip+j)
 
     return r
 
 
-def i4_sobol_generate_std_normal(dim_num, n, skip=1):
+def i4_sobol_generate_std_normal(dim_num, n, skip=0):
     """
     Generates multivariate standard normal quasi-random variables.
 
@@ -141,9 +140,7 @@ def i4_sobol_generate_std_normal(dim_num, n, skip=1):
 
       Output, real np array of shape (n, dim_num).
     """
-
     sobols = i4_sobol_generate(dim_num, n, skip)
-
     normals = norm.ppf(sobols)
 
     return normals
