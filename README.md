@@ -11,7 +11,7 @@ Or a decent package manager like [conda](http://conda.pydata.org/docs/):
     
 You can pin to a specific release from Github like this:
 
-    pip install git+git://github.com/naught101/sobol_seq@v0.2.0#egg=sobol_seq
+    pip install git+https://github.com/naught101/sobol_seq@v0.2.0#egg=sobol_seq
 
 ## Usage ##
 
