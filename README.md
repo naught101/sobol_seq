@@ -1,3 +1,12 @@
+```python
+*** THIS PACKAGE IS NO LONGER MAINTAINED ***
+```
+
+Scipy now has an implementation of a Sobol sequence generator, which is more feature complete than this one.
+You can see the documentation here: http://scipy.github.io/devdocs/generated/scipy.stats.qmc.Sobol.html
+
+----
+
 # Sobol sequence implementation in python
 [Sobol sequences](https://en.wikipedia.org/wiki/Sobol_sequence) are quasi-random low-discrepancy sequences that are useful for creating sample distributions.
 
