@@ -3,7 +3,7 @@
 ```
 
 Scipy now has an implementation of a Sobol sequence generator, which is more feature complete than this one.
-You can see the documentation here: http://scipy.github.io/devdocs/generated/scipy.stats.qmc.Sobol.html
+You can see the documentation here: https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.stats.qmc.Sobol.html
 
 ----
 
